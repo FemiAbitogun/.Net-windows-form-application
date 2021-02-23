@@ -1,0 +1,32 @@
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `studentInfo`(
+
+_firstName varchar(100),
+_middleName varchar(100) ,
+_lastName varchar(100) ,
+
+_sex varchar(10),
+_studentClass varchar(100) ,
+_schoolFees  varchar(100),
+_paymentMode varchar(20) ,
+_payment varchar(100),
+_balance varchar(20)
+)
+BEGIN
+
+insert into students_db.students(
+firstName,
+middleName,
+lastName,
+sex,
+studentClass,
+schoolFees,
+paymentMode,
+payment,
+balance)
+values(_firstName,_middleName,_lastName,_sex,_studentClass,_schoolFees,_paymentMode,_payment,_balance);
+
+
+
+END$$
+DELIMITER ;

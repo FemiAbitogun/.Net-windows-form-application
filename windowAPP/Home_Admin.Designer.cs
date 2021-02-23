@@ -85,7 +85,7 @@
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(166, 85);
             this.button7.TabIndex = 4;
-            this.button7.Text = "STUDENTS";
+            this.button7.Text = "BOOKS";
             this.button7.TextAlign = System.Drawing.ContentAlignment.BottomRight;
             this.button7.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.button7.UseVisualStyleBackColor = true;

@@ -1,0 +1,13 @@
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `LoginAuthentication`(
+_name varchar(100) ,
+_password varchar(100),
+_status varchar(100)
+)
+BEGIN
+
+select * from user.authenticatedUsers
+where name=_name and password=_password and status=_status;
+
+END$$
+DELIMITER ;

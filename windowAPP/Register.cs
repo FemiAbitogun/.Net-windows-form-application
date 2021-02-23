@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using Microsoft.Office.Interop.Excel;
 using Excel = Microsoft.Office.Interop.Excel.Application;
 using MySql.Data.MySqlClient;
-
+using GemBox.Spreadsheet;
 namespace windowAPP
 {
     public partial class Register : Form
@@ -18,7 +18,7 @@ namespace windowAPP
         MySqlConnection sqlConnection;
         MySqlDataAdapter sqlAdapter;
         System.Data.DataTable  usersTable;
-        string connectionString = @"Server=localhost; Database=users;Uid=root;Pwd=root";
+        string connectionString = @"Server=localhost; Database=user;Uid=root;Pwd=root";
         int ID;
 
 
@@ -30,7 +30,7 @@ namespace windowAPP
 
         private void Register_Load(object sender, EventArgs e)
         {
-            //btnExcel.Visible = false;
+        
 
             showGridContent();
             dataGridView1.Columns[0].Visible = false;
@@ -45,7 +45,7 @@ namespace windowAPP
                 try
                 {
                     sqlConnection.Open();
-                    sqlAdapter = new MySqlDataAdapter("select * from users.registeredUsers", sqlConnection);
+                    sqlAdapter = new MySqlDataAdapter("select * from user.authenticatedUsers", sqlConnection);
                     usersTable = new System.Data.DataTable();
                     sqlAdapter.Fill(usersTable);
                     dataGridView1.DataSource = usersTable;
@@ -79,7 +79,7 @@ namespace windowAPP
                 {
                     sqlConnection.Open();
                     MySqlCommand sqlCommand =
-                    new MySqlCommand("  insert into users.registeredUsers (username,password,status ) values ('"+txtUserName.Text.Trim()+"','"+txtPassword.Text.Trim()+"','"+status+"')",
+                    new MySqlCommand("  insert into user.authenticatedUsers (name,password,status ) values ('" + txtUserName.Text.Trim()+"','"+txtPassword.Text.Trim()+"','"+status+"')",
                     sqlConnection);
                     sqlCommand.ExecuteNonQuery();
                     MessageBox.Show("successfully registered user");
@@ -126,7 +126,7 @@ namespace windowAPP
                     using (sqlConnection = new MySqlConnection(connectionString))
                     {
                         sqlConnection.Open();
-                        MySqlCommand sqlCommand = new MySqlCommand("delete from  users.registeredUsers  where ID= ' " + ID + " '  ", sqlConnection);
+                        MySqlCommand sqlCommand = new MySqlCommand("delete from  user.authenticatedUsers  where ID= ' " + ID + " '  ", sqlConnection);
                         sqlCommand.ExecuteNonQuery();
                         MessageBox.Show("successfully deleted user");
                         showGridContent();
@@ -164,7 +164,7 @@ namespace windowAPP
                     using (sqlConnection = new MySqlConnection(connectionString))
                     {
                         sqlConnection.Open();
-                        MySqlCommand sqlCommand = new MySqlCommand("update  users.registeredUsers  set username='"+txtUserName.Text.TrimStart()+"',password='"+txtPassword.Text.TrimStart()+"', status='"+status+"' where id='"+ID+"' ",sqlConnection);
+                        MySqlCommand sqlCommand = new MySqlCommand("update  user.authenticatedUsers  set name='" + txtUserName.Text.TrimStart()+"',password='"+txtPassword.Text.TrimStart()+"', status='"+status+"' where id='"+ID+"' ",sqlConnection);
                         sqlCommand.ExecuteNonQuery();
                         MessageBox.Show("successfully updated user");
                         txtUserName.Text = txtPassword.Text = "";
@@ -194,7 +194,7 @@ namespace windowAPP
                 try
                 {
                     sqlConnection.Open();
-                    sqlAdapter = new MySqlDataAdapter("select * from registeredUsers where username  like  '%"+txtSearchUser.Text+"%' ",sqlConnection);
+                    sqlAdapter = new MySqlDataAdapter("select * from authenticatedUsers where name  like  '%" + txtSearchUser.Text+"%' ",sqlConnection);
                     usersTable = new System.Data.DataTable();
                     sqlAdapter.Fill(usersTable);
                     dataGridView1.DataSource = usersTable;
@@ -221,36 +221,50 @@ namespace windowAPP
 
 private void btnExcel_Click(object sender, EventArgs e)
         {
-        Workbook workbook;
-        Worksheet worksheet;
-        Excel excel_the_Application = new  Excel();
-        workbook = excel_the_Application.Workbooks.Add(XlWBATemplate.xlWBATWorksheet);
-           // workbook = excel_the_Application.Workbooks.Add(Type.Missing);
-            worksheet = workbook.Worksheets[1];
+           
+
+            SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");
+            ExcelFile workbook = new ExcelFile();
+            ExcelWorksheet worksheet = workbook.Worksheets.Add("New worksheet");
+
+
+            /*
+             * using Excel = Microsoft.Office.Interop.Excel.Application;............................................
+
+             * 
+
+                 Workbook workbook;
+                 Worksheet worksheet;
+                 Excel excel_the_Application = new  Excel();
+                 workbook = excel_the_Application.Workbooks.Add(XlWBATemplate.xlWBATWorksheet);
+                  // workbook = excel_the_Application.Workbooks.Add(Type.Missing);
+                 worksheet = workbook.Worksheets[1];
+             */
+
+
             try
             {
-       
-              //populate datagrid view HEADER text into excel.......
-
-                for(int gridHeaderColumn=0; gridHeaderColumn < dataGridView1.Columns.Count; gridHeaderColumn++)
+                  
+                for (int gridHeaderColumn=0; gridHeaderColumn < dataGridView1.Columns.Count; gridHeaderColumn++)
                 {
-                    worksheet.Cells[1, gridHeaderColumn + 1] = dataGridView1.Columns[gridHeaderColumn].HeaderText;
+                    worksheet.Cells[1, gridHeaderColumn + 1].Value = dataGridView1.Columns[gridHeaderColumn].HeaderText;
                 }
                 for (int gridRow=0; gridRow<dataGridView1.Rows.Count; gridRow++)
                 {
                     for(int gridColumnElement=0; gridColumnElement<dataGridView1.Columns.Count; gridColumnElement++)
                     {
-                        worksheet.Cells[2 + gridRow, 1 + gridColumnElement] = dataGridView1.Rows[gridRow].Cells[gridColumnElement].Value.ToString();
+                        worksheet.Cells[2 + gridRow, 1 + gridColumnElement].Value = dataGridView1.Rows[gridRow].Cells[gridColumnElement].Value.ToString();
                     }
 
                 }
-                //worksheet.Columns.AutoFit();            //OPTIONAL.......................
 
+                // workbook.SaveAs(@"C:\Users\Femi Abitogun\Desktop\formApplication\ExcelReports");
+                workbook.Save(@"C:\Users\Femi Abitogun\Desktop\formApplication\ExcelReports.xls");
 
-
-                workbook.SaveAs(@"C:\Users\Femi Abitogun\Desktop\SOFTWARE PROJECTS\ASP.NET.PROJECT\Window Application\Reports");
                 MessageBox.Show("successfully saved to excel report");
-                workbook.Close();
+
+
+              //workbook.Close();
             }
             catch (Exception ex)
             {

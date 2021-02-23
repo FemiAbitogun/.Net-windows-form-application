@@ -18,7 +18,7 @@ namespace windowAPP
         MySqlDataAdapter sqlAdapter;
         static public string _theStatus="user";
         
-        string connectionString = @"Server=localhost; Database=users;Uid=root;Pwd=root";
+        string connectionString = @"Server=localhost; Database=user;Uid=root;Pwd=root";
 
 
         public Login()
@@ -54,7 +54,7 @@ namespace windowAPP
               
                     sqlAdapter = new MySqlDataAdapter("LoginAuthentication", sqlConnection);
                     sqlAdapter.SelectCommand.CommandType = CommandType.StoredProcedure;
-                    sqlAdapter.SelectCommand.Parameters.AddWithValue("_username", txtUserName.Text.Trim());
+                    sqlAdapter.SelectCommand.Parameters.AddWithValue("_name", txtUserName.Text.Trim());
                     sqlAdapter.SelectCommand.Parameters.AddWithValue("_password", txtPassword.Text.Trim());
                     sqlAdapter.SelectCommand.Parameters.AddWithValue("_status", status);
 

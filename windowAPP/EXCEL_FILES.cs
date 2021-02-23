@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.OleDb;
 using System.IO;
+using GemBox.Spreadsheet;
 
 namespace windowAPP
 {
@@ -33,7 +34,7 @@ namespace windowAPP
                 this.txtFilePath.Text = file.FileName;
             }
         }
-
+        /*
         private string ExcelConnection()
         {
             return @"Provider=Microsoft.Jet.OLEDB.4.0;" +
@@ -41,7 +42,7 @@ namespace windowAPP
                         @"Extended Properties=" + Convert.ToChar(34).ToString() +
                         @"Excel 8.0" + Convert.ToChar(34).ToString() + ";";
         }
-
+        */
 
         private void btnLoad_Click(object sender, EventArgs e)
         {
